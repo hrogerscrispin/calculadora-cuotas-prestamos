@@ -1,0 +1,85 @@
+﻿@model CapaPresentacion.ViewModel.Cuota_ViewModel
+@{
+	ViewData["Title"] = "Calculadora de Cuotas";
+
+}
+
+<div class="row justify-content-center mt-5">
+	<div class="col-md-6">
+		<div class="card shadow-sm">
+			<div class="card-header bg-primary text-white">
+				<h5 class="mb-0">
+					Calculadora de Cuotas
+				</h5>
+			</div>
+			
+			<div class="card-body">
+				<form asp-controller="Cuota" asp-action="Calcular" method="post">
+					<div class="mb-3">
+						<label asp-for="FechaNacimiento" class="form-label">Fecha de nacimiento</label>
+						<input asp-for="FechaNacimiento" class="form-control" type="date" />
+						<span asp-validation-for="FechaNacimiento" class="text-danger small"></span>
+					</div>
+
+					<div class="mb-3">
+						<label asp-for="Monto" class="form-label">Monto del prestamo</label>
+						<div class="input-group">
+							<span class="input-group-text">
+								$RD
+							</span>
+							<input asp-for="Monto" class="form-control" type="number" step="0.01" min="1" placeholder="0.00"/>
+						</div>
+						<span asp-validation-for="Monto" class="text-danger small"></span>
+					</div>
+
+					<div class="mb-4">
+						<label asp-for="Meses" class="form-label">Plazo</label>
+						<select asp-for="Meses" class="form-select">
+							<option value="">--Seleccione un plazo</option>
+							<option value="3">3 meses</option>
+							<option value="6">6 meses</option>
+							<option value="9">9 meses</option>
+							<option value="12">12 meses</option>
+						</select>
+						<span asp-validation-for ="Meses" class="text-danger small"></span>
+					</div>
+
+					<div class="d-grid">
+						<button class="btn btn-primary" type="submit">
+							Calcular Cuota
+						</button>
+					</div>
+				</form>
+
+				@if (Model.ValorCuota.HasValue)
+				{
+					<div class="alert alert-success mt-4">
+						<p class="mb-1 text-muted small">
+							Valor de cuota mensual
+						</p>
+						<h4 class="mb-0">
+							RD$ @Model.ValorCuota.Value.ToString("N2")
+						</h4>
+					</div>
+				}
+
+				@if (!string.IsNullOrEmpty(Model.Mensaje))
+				{
+					<div class="alert alert-danger mt-4">
+						<span>
+							@Model.Mensaje
+						</span>
+					</div>
+				}
+
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+		@{
+			await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		}
+}
+
