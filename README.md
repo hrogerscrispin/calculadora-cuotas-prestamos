@@ -3,7 +3,7 @@
 Aplicación web desarrollada en ASP.NET Core MVC para calcular cuotas de préstamos según la edad del solicitante.
 
 ## Tecnologías
-- ASP.NET Core MVC .NET 8
+- ASP.NET Core MVC .NET 10
 - SQL Server
 - Bootstrap 5
 
