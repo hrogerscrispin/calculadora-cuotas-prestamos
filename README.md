@@ -1,15 +1,17 @@
 # Calculadora de Cuotas para Préstamos
 
-Aplicación web desarrollada en ASP.NET Core MVC para calcular cuotas de préstamos según la edad del solicitante.
+Aplicación web desarrollada en ASP.NET Web API MVC y Vistas en ASP.Net Core MVC para calcular cuotas de préstamos según la edad del solicitante.
 
 ## Tecnologías
-- ASP.NET Core MVC .NET 10
+- ASP.NET Web API -- .NET10
+- ASP.NET Core MVC -- .NET10
 - SQL Server
 - Bootstrap 5
 
 ## Estructura
 - `CapaDatos` — acceso a datos con stored procedures
-- `CapaNegocio` — lógica de negocio 
+- `CapaNegocio` — lógica de negocio
+- `CapaAPI` — expone endpoint utilizado para calcular las cuotas
 - `CapaPresentacion` — interfaz web MVC simple
 
 
