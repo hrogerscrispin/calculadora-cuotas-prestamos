@@ -1,5 +1,4 @@
-﻿@model CapaPresentacion.ViewModel.Cuota_ViewModel
-@{
+﻿@{
 	ViewData["Title"] = "Calculadora de Cuotas";
 
 }
@@ -14,63 +13,46 @@
 			</div>
 			
 			<div class="card-body">
-				<form asp-controller="Cuota" asp-action="Calcular" method="post">
+				<form id="form-cuota">
 					<div class="mb-3">
-						<label asp-for="FechaNacimiento" class="form-label">Fecha de nacimiento</label>
-						<input asp-for="FechaNacimiento" class="form-control" type="date" />
-						<span asp-validation-for="FechaNacimiento" class="text-danger small"></span>
+						<label class="form-label">Fecha de nacimiento</label>
+						<input class="form-control" type="date" min="1900-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" id="FechaNacimiento" />
 					</div>
 
 					<div class="mb-3">
-						<label asp-for="Monto" class="form-label">Monto del prestamo</label>
+						<label class="form-label">Monto del prestamo</label>
 						<div class="input-group">
 							<span class="input-group-text">
 								$RD
 							</span>
-							<input asp-for="Monto" class="form-control" type="number" step="0.01" min="1" placeholder="0.00"/>
+							<input class="form-control" type="number" id="Monto" step="0.01" min="1" placeholder="0.00"/>
 						</div>
-						<span asp-validation-for="Monto" class="text-danger small"></span>
 					</div>
 
 					<div class="mb-4">
-						<label asp-for="Meses" class="form-label">Plazo</label>
-						<select asp-for="Meses" class="form-select">
+						<label class="form-label">Plazo</label>
+						<select class="form-select" id="Meses">
 							<option value="">--Seleccione un plazo</option>
 							<option value="3">3 meses</option>
 							<option value="6">6 meses</option>
 							<option value="9">9 meses</option>
 							<option value="12">12 meses</option>
 						</select>
-						<span asp-validation-for ="Meses" class="text-danger small"></span>
 					</div>
 
 					<div class="d-grid">
-						<button class="btn btn-primary" type="submit">
+						<button class="btn btn-primary" type="button" onclick="calcular()">
 							Calcular Cuota
 						</button>
 					</div>
 				</form>
 
-				@if (Model.ValorCuota.HasValue)
-				{
-					<div class="alert alert-success mt-4">
-						<p class="mb-1 text-muted small">
-							Valor de cuota mensual
-						</p>
-						<h4 class="mb-0">
-							RD$ @Model.ValorCuota.Value.ToString("N2")
-						</h4>
-					</div>
-				}
+				<div id="resultadoCuota" class="alert alert-success mt-4" style="display:none;">
+					<p class="mb-1 text-muted small">Valor de cuota mensual</p>
+					<h4 class="mb-0"></h4>
+				</div>
 
-				@if (!string.IsNullOrEmpty(Model.Mensaje))
-				{
-					<div class="alert alert-danger mt-4">
-						<span>
-							@Model.Mensaje
-						</span>
-					</div>
-				}
+				<div id="resultadoError" class="alert alert-danger mt-4" style="display:none;"></div>
 
 			</div>
 		</div>
@@ -78,8 +60,52 @@
 </div>
 
 @section Scripts {
-		@{
-			await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	<script>
+
+		// consumo del endpoint...
+		function calcular() {
+			const fechaNacimiento = document.getElementById("FechaNacimiento").value;
+			const monto = document.getElementById("Monto").value;
+			const meses = document.getElementById("Meses").value;
+
+		
+			if (!fechaNacimiento || !monto || !meses) {
+				document.getElementById("resultadoError").style.display = "block";
+				document.getElementById("resultadoError").innerText = "Todos los campos son requeridos.";
+				document.getElementById("resultadoCuota").style.display = "none";
+				return;
+			}
+
+			const data = {
+				fechaNacimiento: fechaNacimiento,
+				monto: parseFloat(monto),
+				meses: parseInt(meses)
+			};
+
+			fetch('https://localhost:7092/api/Cuota/calcular', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(data)
+			})
+			.then(response => response.json())
+			.then(result => {
+				if (result.valorCuota) {
+					document.getElementById("resultadoCuota").style.display = "block";
+					document.getElementById("resultadoCuota").querySelector("h4").innerText =
+						"RD$ " + result.valorCuota.toFixed(2);
+					document.getElementById("resultadoError").style.display = "none";
+				} else {
+					document.getElementById("resultadoError").style.display = "block";
+					document.getElementById("resultadoError").innerText = result.message;
+					document.getElementById("resultadoCuota").style.display = "none";
+				}
+			})
+			.catch(error => {
+				console.error(error);
+				document.getElementById("resultadoError").style.display = "block";
+				document.getElementById("resultadoError").innerText = "Error al conectar con la API.";
+			});
 		}
+	</script>
 }
 

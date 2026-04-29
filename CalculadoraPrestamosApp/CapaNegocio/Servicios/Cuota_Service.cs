@@ -21,6 +21,7 @@ namespace CapaNegocio.Servicios
         {
             try
             {
+
                 int edad = CalcularEdad(fechaNacimiento);
 
                 if (edad < 18)
@@ -75,6 +76,10 @@ namespace CapaNegocio.Servicios
         public int CalcularEdad(DateTime fechaNacimiento)
         {
             DateTime fechaActual = DateTime.Today;
+
+            if(fechaNacimiento > fechaActual)
+                throw new ArgumentException("La fecha de nacimiento no puede ser en el futuro.");
+
             int edad = fechaActual.Year - fechaNacimiento.Year;
             if (fechaNacimiento.Date > fechaActual.AddYears(-edad)) edad--;
             return edad;
