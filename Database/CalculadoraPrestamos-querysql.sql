@@ -48,3 +48,11 @@ AS
 set nocount on;
 	INSERT INTO RegistroConsultas(Edad,Monto,Meses,ValorCuota,IP_de_Consulta) values (@Edad,@Monto,@Meses,@ValorCuota,@IP)
 GO;
+
+
+--insercion de data
+InSERT INTO Tasa(Edad,TasaFija) values
+(18,1.20),(19,1.18),(20,1.16),(21,1.14),(22,1.12),(23,1.10),(24,1.08),(25,1.05)
+
+select * from Tasa
+
