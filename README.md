@@ -12,11 +12,6 @@ Aplicación web desarrollada en ASP.NET Core MVC para calcular cuotas de présta
 - `CapaNegocio` — lógica de negocio 
 - `CapaPresentacion` — interfaz web MVC simple
 
-## Funcionalidades
-- Cálculo de cuota según edad, monto y plazo
-- Validación de edad mínima (18) y máxima (25)
-- Registro de consultas en base de datos
-- Validaciones en formulario
 
 ## Configuración
 En `appsettings.json` configurar el connection string:
