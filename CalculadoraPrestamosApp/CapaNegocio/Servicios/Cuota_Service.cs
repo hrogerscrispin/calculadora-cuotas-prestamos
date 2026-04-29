@@ -68,7 +68,7 @@ namespace CapaNegocio.Servicios
                 return new RetornoCuota
                 {
                     esExitoso = false,
-                    Mensaje = $"Error inesperado: {ex.Message}"
+                    Mensaje = $" {ex.Message}"
                 };
             }
         }

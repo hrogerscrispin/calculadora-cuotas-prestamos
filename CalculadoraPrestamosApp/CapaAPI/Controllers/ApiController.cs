@@ -6,10 +6,10 @@ namespace CapaAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CuotaController : ControllerBase   
+    public class ApiController : ControllerBase   
     {
         private readonly ICuota_Service service;
-        public CuotaController(ICuota_Service _service)
+        public ApiController(ICuota_Service _service)
         {
             service = _service;
         }
@@ -23,7 +23,7 @@ namespace CapaAPI.Controllers
                 if (request == null)
                     return BadRequest(new { message = "Request invalido" });
 
-                string ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Descononida";
+                string ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Desconocida";
 
                 var resultado = service.CalcularCuota(request.FechaNacimiento, request.Monto, request.Meses, ip);
                 if (!resultado.esExitoso)

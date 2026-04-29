@@ -13,6 +13,11 @@ builder.Services.AddScoped<Cuota_Repository>(_ =>
 
 builder.Services.AddScoped<ICuota_Service, Cuota_Service>();
 
+builder.Services.AddHttpClient("CuotaAPI", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7092");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
